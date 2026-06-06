@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Escenarios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Generador de Escenarios</h1>
+            <button id="btnAgregar" class="btn-agregar">+ Crear Escenario</button>
+        </div>
+        
+        <div id="listaTextos" class="lista-textos">
+            <div style="text-align: center; padding: 20px;">Cargando Escenarios...</div>
+        </div>
+    </div>
+
+    <!-- Modal para crear nuevo texto con selectores -->
+    <div id="modalAgregar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crear Nuevo Escenario</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="selector-group">
+                    <label for="raza">Raza:</label>
+                    <select id="raza" class="selector">
+                        <option value="humanos">Humanos</option>
+                        <option value="elfos">Elfos</option>
+                        <option value="enanos">Enanos</option>
+                        <option value="orcos">Orcos</option>
+                        <option value="duendes">Duendes</option>
+                        <option value="halflings">Halflings</option>
+                        <option value="tieflings">Tieflings</option>
+                        <option value="dragonborns">Dragonborns</option>
+                    </select>
+                </div>
+
+                <div class="selector-group">
+                    <label for="ambiente">Ambiente:</label>
+                    <select id="ambiente" class="selector">
+                        <option value="bosques">Bosques</option>
+                        <option value="montañas">Montañas</option>
+                        <option value="desiertos">Desiertos</option>
+                        <option value="junglas">Junglas</option>
+                        <option value="ciudades">Ciudades</option>
+                        <option value="cuevas">Cuevas</option>
+                        <option value="pantanos">Pantanos</option>
+                        <option value="praderas">Praderas</option>
+                    </select>
+                </div>
+
+                <div class="selector-group">
+                    <label for="extension">Extensión:</label>
+                    <select id="extension" class="selector">
+                        <option value="pueblo">Pueblo</option>
+                        <option value="reino">Reino</option>
+                        <option value="región">Región</option>
+                    </select>
+                </div>
+
+                <div class="preview-group">
+                    <label>Vista previa del escenario:</label>
+                    <div id="vistaPrevia" class="vista-previa">
+                        Selecciona las opciones para ver el escenario
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnCancelar" class="btn-cancelar">Cancelar</button>
+                <button id="btnGuardar" class="btn-guardar">Guardar Escenario</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

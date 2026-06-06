@@ -1,0 +1,29 @@
+{
+  "textos": [
+    {
+      "id": 1,
+      "texto": "Estas en un bosque de bosques, donde viven los humanos",
+      "fecha": "2024-01-15 10:30:00"
+    },
+    {
+      "id": 2,
+      "texto": "Estas en un valle de montañas, donde viven los elfos",
+      "fecha": "2024-01-15 10:31:00"
+    },
+    {
+      "id": 3,
+      "texto": "Estas en un reino de ciudades, donde viven los magos",
+      "fecha": "2024-01-15 10:32:00"
+    },
+    {
+      "id": 1780712982890,
+      "texto": "Estas en un pueblo de bosques, donde viven los humanos",
+      "fecha": "2026-06-05 22:29:42"
+    },
+    {
+      "id": 1780713135398,
+      "texto": "Estas en un pueblo de bosques, donde viven los humanos",
+      "fecha": "2026-06-05 22:32:15"
+    }
+  ]
+}
