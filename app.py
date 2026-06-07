@@ -27,7 +27,7 @@ rag_pipeline = None
 if RAG_AVAILABLE:
     try:
         rag_pipeline = RAGPipeline(
-            model="qwen2.5-3b",
+            model="qwen2.5-1.5b",
             use_gpu=False  # Cambia a True si tienes GPU
         )
         print("✅ RAG Pipeline inicializado correctamente")

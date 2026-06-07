@@ -15,23 +15,16 @@ except ImportError:
 class RAGGenerator:
     # Opciones de modelo para D&D
     MODEL_OPTIONS = {
-        "qwen2.5-3b": {
-            "name": "Qwen2.5-3B-Instruct",
-            "gguf": "qwen2.5-3b-instruct-q4_k_m.gguf",
-            "hf_id": "Qwen/Qwen2.5-3B-Instruct-GGUF",
-            "context": 32768,
-            "ram_gb": 3,
-        },
         "qwen2.5-1.5b": {
             "name": "Qwen2.5-1.5B-Instruct",
-            "gguf": "qwen2.5-1.5b-instruct-q4_k_m.gguf",
+            "gguf": "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf",
             "hf_id": "Qwen/Qwen2.5-1.5B-Instruct-GGUF",
             "context": 32768,
             "ram_gb": 2,
         }
     }
     
-    def __init__(self, model="qwen2.5-3b", model_path=None, use_gpu=False):
+    def __init__(self, model="qwen2.5-1.5b", model_path=None, use_gpu=False):
         self.model_name = model
         self.model = None
         self.use_gpu = use_gpu
@@ -39,7 +32,7 @@ class RAGGenerator:
         if model_path:
             self.model_path = Path(model_path)
         else:
-            model_info = self.MODEL_OPTIONS.get(model, self.MODEL_OPTIONS["qwen2.5-3b"])
+            model_info = self.MODEL_OPTIONS.get(model, self.MODEL_OPTIONS["qwen2.5-1.5b"])
             self.model_path = Path("models") / model_info["gguf"]
             self.model_info = model_info
         

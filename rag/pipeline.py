@@ -2,7 +2,7 @@ from .retriever import RAGRetriever
 from .generator import RAGGenerator
 
 class RAGPipeline:
-    def __init__(self, model="qwen2.5-3b", model_path=None, use_gpu=False):
+    def __init__(self, model="qwen2.5-1.5b", model_path=None, use_gpu=False):
         print(f"\n🎲 Inicializando RAG Pipeline para D&D")
         print(f"   Modelo: {model}")
         
