@@ -50,17 +50,30 @@ def generar_escenario():
         data = request.json
         raza = data.get('raza', 'humanos')
         ambiente = data.get('ambiente', 'bosques')
-        extension = data.get('extension', 'bosque')
+        extension = data.get('extension', 'pueblo')
         
         texto_generado = ""
         usando_ia = False
+        evaluacion = None
         
         if rag_pipeline:
             try:
-                descripcion, contextos = rag_pipeline.generar_escenario(raza, ambiente, extension)
+                # El pipeline ahora puede devolver 3 valores
+                resultado = rag_pipeline.generar_escenario(raza, ambiente, extension)
+                
+                if len(resultado) == 3:
+                    descripcion, contextos, evaluacion = resultado
+                else:
+                    descripcion, contextos = resultado
+                    evaluacion = None
+                
                 texto_generado = descripcion
                 usando_ia = True
                 print(f"✅ Escenario generado con {len(contextos)} contextos")
+                
+                if evaluacion:
+                    print(f"📊 Evaluación: {evaluacion['puntuacion']:.1f}% - {'Aprobado' if evaluacion['cumple'] else 'Rechazado'}")
+                
             except Exception as e:
                 print(f"❌ Error en RAG: {e}")
                 texto_generado = f"❌ Error generando escenario: {str(e)}"
@@ -70,7 +83,8 @@ def generar_escenario():
         return jsonify({
             "success": True,
             "texto": texto_generado,
-            "usando_ia": usando_ia
+            "usando_ia": usando_ia,
+            "evaluacion": evaluacion  # Incluir evaluación en la respuesta
         })
         
     except Exception as e:
