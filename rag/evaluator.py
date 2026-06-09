@@ -1,248 +1,177 @@
-import re
-from typing import Dict, List, Tuple
+from typing import Dict, Tuple
 
 class RAGEvaluator:
-    """Evaluador de escenarios D&D que verifica que el texto generado cumpla con las características requeridas"""
+    """Evaluador de escenarios D&D que usa el mismo modelo para evaluar y corregir"""
     
-    def __init__(self):
-        print("🎲 Inicializando Evaluador de Escenarios D&D")
-        self.criterios_evaluacion = self._cargar_criterios()
-    
-    def _cargar_criterios(self) -> Dict:
-        """Carga los criterios de evaluación"""
-        return {
-            "raza": {
-                "palabras_clave": {
-                    "humanos": ["humano", "humanos", "aldea", "castillo", "mercader", "comercio", "ciudad", "reino"],
-                    "elfos": ["elfo", "elfos", "árbol", "bosque", "magia", "naturaleza", "ancestral", "feérico"],
-                    "enanos": ["enano", "enanos", "montaña", "forja", "martillo", "piedra", "tesoro", "mineral"],
-                    "orcos": ["orco", "orcos", "guerrero", "tribu", "fuerza", "combate", "clan", "honor"],
-                    "duendes": ["duende", "duendes", "pequeño", "astuto", "trampa", "ingenio"],
-                    "halflings": ["halfling", "mediano", "pequeño", "comunidad", "hobbit"],
-                    "tieflings": ["tiefling", "infernal", "cuernos", "demonio", "maldición"],
-                    "dragonborns": ["dragonborn", "draconico", "escamas", "aliento", "dragon"]
-                }
-            },
-            "ambiente": {
-                "palabras_clave": {
-                    "bosques": ["árbol", "bosque", "hoja", "naturaleza", "verde", "flora", "fauna", "selva"],
-                    "montañas": ["montaña", "pico", "roca", "altura", "nieve", "cordillera", "valle"],
-                    "desiertos": ["desierto", "arena", "sol", "duna", "calor", "árido", "sed"],
-                    "junglas": ["jungla", "vegetación", "denso", "tropical", "exótico", "selva"],
-                    "cuevas": ["cueva", "subterráneo", "caverna", "oscuro", "profundidad", "túnel"],
-                    "pantanos": ["pantano", "ciénaga", "lodo", "niebla", "humedad", "ciénaga"],
-                    "praderas": ["pradera", "llano", "hierba", "campo", "abierto", "pastizal"],
-                    "tundra": ["tundra", "hielo", "nieve", "frío", "glaciar", "polar"],
-                    "costas": ["costa", "mar", "playa", "océano", "acantilado", "puerto"]
-                }
-            },
-            "extension": {
-                "palabras_clave": {
-                    "pueblo": ["pueblo", "aldea", "vecino", "casa", "comunidad", "habitante"],
-                    "reino": ["reino", "tierra", "dominio", "territorio", "nación", "frontera"],
-                    "región": ["región", "zona", "área", "territorio", "extensión", "provincia"]
-                }
-            }
-        }
+    def __init__(self, generator):
+        self.generator = generator
+        print("🎲 Inicializando Evaluador de Escenarios D&D con IA")
     
     def evaluar_escenario(self, texto: str, raza: str, ambiente: str, extension: str) -> Dict:
         """
-        Evalúa si el escenario generado cumple con todas las características requeridas
-        
-        Returns:
-            Dict con: {
-                "cumple": bool,
-                "puntuacion": float (0-100),
-                "detalles": dict con evaluaciones por categoría,
-                "razones": list de problemas encontrados,
-                "sugerencias": list de mejoras sugeridas
-            }
+        Usa el modelo para evaluar si el escenario cumple con las características requeridas
         """
-        texto_lower = texto.lower()
         
-        evaluacion = {
-            "cumple": True,
-            "puntuacion": 0,
-            "detalles": {},
-            "razones": [],
-            "sugerencias": []
-        }
+        prompt_evaluacion = f"""Evalúa la siguiente descripción de un escenario de Dungeons & Dragons y determina si cumple con los requisitos.
+
+Características requeridas:
+- Raza predominante: {raza}
+- Ambiente: {ambiente}
+- Extensión: {extension}
+
+DESCRIPCIÓN A EVALUAR:
+{texto}
+
+INSTRUCCIONES DE EVALUACIÓN:
+Analiza la descripción y responde SOLO con un JSON válido en este formato exacto:
+{{
+    "cumple": true/false,
+    "puntuacion": (número entre 0 y 100),
+    "raza_cumple": true/false,
+    "ambiente_cumple": true/false,
+    "extension_cumple": true/false,
+    "longitud_adecuada": true/false,
+    "texto_completo": true/false,
+    "problemas": ["problema1", "problema2"],
+    "sugerencias": ["sugerencia1", "sugerencia2"]
+}}
+
+Criterios de evaluación:
+1. ¿La descripción menciona adecuadamente la raza {raza} y sus características?
+2. ¿El ambiente {ambiente} está bien representado?
+3. ¿La extensión {extension} es apropiada para el nivel de detalle?
+4. ¿El texto está completo (no cortado a mitad)?
+5. ¿La calidad narrativa es buena para D&D?
+
+Sé estricto pero justo. Si el texto está cortado o incompleto, marca "texto_completo": false.
+Si la puntuación es menor a 70, considera que no cumple."""
         
-        # Evaluar cada categoría
-        evaluacion["detalles"]["raza"] = self._evaluar_categoria(
-            texto_lower, raza, self.criterios_evaluacion["raza"]["palabras_clave"], "raza"
-        )
-        
-        evaluacion["detalles"]["ambiente"] = self._evaluar_categoria(
-            texto_lower, ambiente, self.criterios_evaluacion["ambiente"]["palabras_clave"], "ambiente"
-        )
-        
-        evaluacion["detalles"]["extension"] = self._evaluar_categoria(
-            texto_lower, extension, self.criterios_evaluacion["extension"]["palabras_clave"], "extensión"
-        )
-        
-        # Verificar longitud y coherencia
-        evaluacion["detalles"]["longitud"] = self._evaluar_longitud(texto)
-        evaluacion["detalles"]["coherencia"] = self._evaluar_coherencia(texto)
-        
-        # Calcular puntuación total
-        puntuaciones = [
-            evaluacion["detalles"]["raza"]["puntuacion"],
-            evaluacion["detalles"]["ambiente"]["puntuacion"],
-            evaluacion["detalles"]["extension"]["puntuacion"],
-            evaluacion["detalles"]["longitud"]["puntuacion"],
-            evaluacion["detalles"]["coherencia"]["puntuacion"]
-        ]
-        evaluacion["puntuacion"] = sum(puntuaciones) / len(puntuaciones)
-        
-        # Determinar si cumple (puntuación mínima 70%)
-        evaluacion["cumple"] = evaluacion["puntuacion"] >= 70
-        
-        # Recopilar razones y sugerencias
-        for categoria, detalle in evaluacion["detalles"].items():
-            if not detalle.get("cumple", True):
-                evaluacion["razones"].extend(detalle.get("razones", []))
-                evaluacion["sugerencias"].extend(detalle.get("sugerencias", []))
-        
-        return evaluacion
+        try:
+            # Usar el mismo modelo para evaluar con temperatura baja para consistencia
+            respuesta = self.generator._generate(prompt_evaluacion, max_tokens=500, temperature=0.2)
+            
+            # Extraer JSON de la respuesta
+            import json
+            import re
+            
+            # Buscar JSON en la respuesta
+            json_match = re.search(r'\{[^{}]*\{[^{}]*\}[^{}]*\}|{[^{}]*}', respuesta, re.DOTALL)
+            if json_match:
+                evaluacion = json.loads(json_match.group())
+            else:
+                # Si no encuentra JSON, crear evaluación por defecto
+                evaluacion = self._evaluacion_por_defecto(texto, raza, ambiente, extension)
+            
+            return evaluacion
+            
+        except Exception as e:
+            print(f"   ⚠️ Error en evaluación con IA: {e}")
+            return self._evaluacion_por_defecto(texto, raza, ambiente, extension)
     
-    def _evaluar_categoria(self, texto: str, valor_requerido: str, palabras_clave: Dict, nombre_categoria: str) -> Dict:
-        """Evalúa una categoría específica (raza, ambiente, extensión)"""
-        
-        resultado = {
-            "cumple": False,
-            "puntuacion": 0,
-            "coincidencias": [],
-            "razones": [],
-            "sugerencias": []
-        }
-        
-        if valor_requerido not in palabras_clave:
-            resultado["razones"].append(f"No se encontraron palabras clave para {valor_requerido} en {nombre_categoria}")
-            resultado["sugerencias"].append(f"Asegúrate de que el modelo use referencias a {valor_requerido}")
-            return resultado
-        
-        palabras_requeridas = palabras_clave[valor_requerido]
-        coincidencias = []
-        
-        for palabra in palabras_requeridas:
-            if re.search(r'\b' + re.escape(palabra) + r'\b', texto, re.IGNORECASE):
-                coincidencias.append(palabra)
-        
-        resultado["coincidencias"] = coincidencias
-        
-        # Calcular puntuación basada en coincidencias
-        puntuacion_base = (len(coincidencias) / len(palabras_requeridas)) * 100
-        resultado["puntuacion"] = min(100, puntuacion_base + 20)  # Bonus por cualquier coincidencia
-        
-        if len(coincidencias) >= len(palabras_requeridas) * 0.3:  # Al menos 30% de coincidencias
-            resultado["cumple"] = True
-        else:
-            resultado["cumple"] = False
-            resultado["razones"].append(
-                f"Faltan referencias a {valor_requerido} en la descripción del {nombre_categoria}"
-            )
-            resultado["sugerencias"].append(
-                f"Incluye términos como: {', '.join(palabras_requeridas[:5])} en la descripción"
-            )
-        
-        return resultado
-    
-    def _evaluar_longitud(self, texto: str) -> Dict:
-        """Evalúa que la longitud del texto sea adecuada"""
-        
-        resultado = {
-            "cumple": False,
-            "puntuacion": 0,
-            "razones": [],
-            "sugerencias": []
-        }
-        
+    def _evaluacion_por_defecto(self, texto: str, raza: str, ambiente: str, extension: str) -> Dict:
+        """Evaluación de respaldo por si falla la IA"""
         palabras = len(texto.split())
         
-        if 150 <= palabras <= 500:
-            resultado["cumple"] = True
-            resultado["puntuacion"] = 100
-        elif 100 <= palabras < 150:
-            resultado["cumple"] = True
-            resultado["puntuacion"] = 75
-            resultado["sugerencias"].append("El escenario podría ser un poco más detallado")
-        elif palabras < 100:
-            resultado["cumple"] = False
-            resultado["puntuacion"] = 40
-            resultado["razones"].append(f"El escenario es demasiado corto ({palabras} palabras)")
-            resultado["sugerencias"].append("Genera una descripción más detallada (mínimo 150 palabras)")
-        elif palabras > 500:
-            resultado["cumple"] = True
-            resultado["puntuacion"] = 80
-            resultado["sugerencias"].append("El escenario es extenso, considera si es apropiado para tu sesión")
+        # Verificar si el texto parece cortado
+        texto_completo = texto.endswith(('.', '!', '?', '"', "'")) and not texto.endswith((' y ', ' o ', ' pero '))
         
-        return resultado
-    
-    def _evaluar_coherencia(self, texto: str) -> Dict:
-        """Evalúa la coherencia básica del texto"""
-        
-        resultado = {
-            "cumple": True,
-            "puntuacion": 85,
-            "razones": [],
-            "sugerencias": []
+        return {
+            "cumple": palabras > 100 and texto_completo,
+            "puntuacion": min(100, max(0, (palabras / 200) * 100)) if texto_completo else 40,
+            "raza_cumple": raza.lower() in texto.lower(),
+            "ambiente_cumple": ambiente.lower() in texto.lower(),
+            "extension_cumple": extension.lower() in texto.lower(),
+            "longitud_adecuada": palabras > 100,
+            "texto_completo": texto_completo,
+            "problemas": ["Texto incompleto" if not texto_completo else "Longitud insuficiente" if palabras < 100 else ""],
+            "sugerencias": ["Completa la descripción" if not texto_completo else "Añade más detalles" if palabras < 100 else ""]
         }
-        
-        # Verificar repeticiones excesivas
-        palabras = texto.lower().split()
-        frecuencias = {}
-        for palabra in palabras:
-            if len(palabra) > 3:
-                frecuencias[palabra] = frecuencias.get(palabra, 0) + 1
-        
-        repeticiones = [p for p, f in frecuencias.items() if f > 5 and len(p) > 3]
-        if repeticiones:
-            resultado["puntuacion"] -= 15
-            resultado["sugerencias"].append("Evita repetir las mismas palabras con frecuencia")
-        
-        # Verificar longitud de párrafos
-        parrafos = texto.split('\n')
-        parrafos_largos = [p for p in parrafos if len(p.split()) > 150 and p.strip()]
-        if parrafos_largos:
-            resultado["puntuacion"] -= 10
-            resultado["sugerencias"].append("Divide los párrafos muy largos para mejor legibilidad")
-        
-        # Verificar que no haya texto vacío o error
-        if "error" in texto.lower() or "❌" in texto:
-            resultado["cumple"] = False
-            resultado["puntuacion"] = 0
-            resultado["razones"].append("El texto contiene mensajes de error")
-            resultado["sugerencias"].append("Regenera el escenario")
-        
-        return resultado
     
-    def regenerar_si_necesario(self, generador, raza: str, ambiente: str, extension: str, max_intentos: int = 3) -> Tuple[str, Dict]:
+    def corregir_escenario(self, texto: str, raza: str, ambiente: str, extension: str, problemas: list) -> str:
         """
-        Regenera el escenario hasta que cumpla con los criterios o se alcance el máximo de intentos
+        Usa el modelo para corregir el escenario basado en los problemas detectados
+        """
         
-        Returns:
-            Tuple con (texto_generado, evaluacion_final)
+        prompt_correccion = f"""La siguiente descripción de un escenario de D&D necesita mejoras.
+
+CARACTERÍSTICAS REQUERIDAS:
+- Raza: {raza}
+- Ambiente: {ambiente}
+- Extensión: {extension}
+
+DESCRIPCIÓN ACTUAL:
+{texto}
+
+PROBLEMAS DETECTADOS:
+{chr(10).join(f'- {p}' for p in problemas if p)}
+
+INSTRUCCIONES DE CORRECCIÓN:
+1. Completa el texto si está cortado o incompleto
+2. Añade más detalles sobre la raza {raza} y su cultura
+3. Enriquece la descripción del ambiente {ambiente}
+4. Ajusta el nivel de detalle para que sea apropiado para un {extension}
+5. Mantén el mismo tono y estilo narrativo
+6. NO incluyas la palabra "EDITADO:" ni "CORREGIDO:" en la respuesta
+7. Responde SOLO con el texto corregido, sin explicaciones adicionales
+
+Genera la versión mejorada de la descripción:"""
+        
+        try:
+            # Usar temperatura ligeramente más alta para creatividad en corrección
+            texto_corregido = self.generator._generate(prompt_correccion, max_tokens=800, temperature=0.6)
+            
+            # Limpiar el resultado si es necesario
+            if texto_corregido.startswith('"') and texto_corregido.endswith('"'):
+                texto_corregido = texto_corregido[1:-1]
+            
+            return texto_corregido.strip()
+            
+        except Exception as e:
+            print(f"   ⚠️ Error en corrección con IA: {e}")
+            return texto  # Devolver el original si falla
+    
+    def regenerar_si_necesario(self, raza: str, ambiente: str, extension: str, max_intentos: int = 3) -> Tuple[str, Dict]:
         """
+        Regenera y evalúa el escenario hasta que cumpla con los criterios
+        """
+        texto = None
+        evaluacion = None
+        
         for intento in range(max_intentos):
             print(f"\n🔄 Intento {intento + 1} de {max_intentos}")
             
-            # Generar escenario
-            texto = generador.generar_descripcion_dnd(raza, ambiente, extension)
+            if intento == 0:
+                # Primera generación normal
+                texto = self.generator.generar_descripcion_dnd(raza, ambiente, extension)
+            else:
+                # Intentos siguientes: corregir el texto anterior
+                if evaluacion and evaluacion.get("problemas"):
+                    print(f"   🔧 Corrigiendo escenario basado en evaluación...")
+                    texto = self.corregir_escenario(texto, raza, ambiente, extension, evaluacion.get("problemas", []))
+                else:
+                    # Si no hay problemas específicos, regenerar desde cero con temperatura diferente
+                    print(f"   🎲 Regenerando con temperatura ajustada...")
+                    texto = self.generator.generar_descripcion_dnd(raza, ambiente, extension, temperature=0.8)
             
-            # Evaluar
+            # Evaluar el texto generado
             evaluacion = self.evaluar_escenario(texto, raza, ambiente, extension)
             
-            print(f"   Puntuación: {evaluacion['puntuacion']:.1f}%")
-            print(f"   Cumple criterios: {'✅' if evaluacion['cumple'] else '❌'}")
+            print(f"   📊 Puntuación: {evaluacion.get('puntuacion', 0):.1f}%")
+            print(f"   📝 Completo: {'✅' if evaluacion.get('texto_completo', False) else '❌'}")
+            print(f"   🎯 Cumple requisitos: {'✅' if evaluacion.get('cumple', False) else '❌'}")
             
-            if evaluacion["cumple"]:
+            if evaluacion.get("texto_completo", False):
+                print(f"   ✅ Texto completo detectado")
+            
+            if evaluacion.get("cumple", False):
                 print(f"   ✅ Escenario aceptado después de {intento + 1} intentos")
                 return texto, evaluacion
             else:
-                print(f"   ⚠️ No cumple criterios. Razones:")
-                for razon in evaluacion["razones"][:3]:
-                    print(f"      - {razon}")
+                problemas = evaluacion.get("problemas", [])
+                if problemas:
+                    print(f"   ⚠️ Problemas detectados:")
+                    for problema in problemas[:3]:
+                        print(f"      - {problema}")
         
         print(f"   ⚠️ Se alcanzó el máximo de intentos. Usando el último escenario generado")
         return texto, evaluacion
