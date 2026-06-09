@@ -6,40 +6,49 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #1a1a1a;
     min-height: 100vh;
-    padding: 20px;
+    padding: 0; /* Sin padding */
+    margin: 0;
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    max-width: 100%; /* Ancho completo */
+    width: 100%;
+    margin: 0;
+    background: #1a1a1a;
+    box-shadow: none; /* Sin sombra */
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Altura completa de la ventana */
+    border: none; /* Sin bordes */
+    border-radius: 0; /* Sin bordes redondeados */
 }
 
 .header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #8b0000; /* Rojo oscuro */
     color: white;
     padding: 20px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
+    border-bottom: 2px solid #660000;
 }
 
 .header h1 {
     font-size: 1.8rem;
     font-weight: 600;
+    color: white;
 }
 
 .btn-agregar {
-    background: rgba(255,255,255,0.2);
-    border: 2px solid white;
+    background: #1a1a1a;
     color: white;
     padding: 10px 20px;
-    border-radius: 25px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
@@ -47,62 +56,67 @@ body {
 }
 
 .btn-agregar:hover {
-    background: white;
-    color: #667eea;
-    transform: translateY(-2px);
+    background: #252525;
+    transform:scale(1.1);
 }
 
+/* Contenedor de textos - Ocupa todo el espacio disponible */
 .lista-textos {
     padding: 20px;
-    max-height: 500px;
+    flex: 1;
     overflow-y: auto;
+    min-height: 0;
+    background: #1a1a1a;
 }
 
+/* Grid layout para los textos */
 .texto-item {
-    background: #f8f9fa;
-    border-left: 4px solid #667eea;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
+    background: #1a1a1a;
+    border-left: 5px solid #8b0000;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
     transition: all 0.3s ease;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .texto-item:hover {
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateX(10px);
+    background: #252525;
+    border-left-color: #b30000;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
 }
 
 .texto-contenido {
-    color: #333;
-    line-height: 1.5;
-    margin-bottom: 10px;
+    color: #e0e0e0;
+    line-height: 1.6;
+    margin-bottom: 0;
     word-wrap: break-word;
-}
-
-.texto-fecha {
-    font-size: 0.8rem;
-    color: #666;
-    font-style: italic;
+    font-size: 1rem;
+    padding-right: 80px;
+    flex: 1;
 }
 
 .btn-eliminar {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    background: #dc3545;
+    top: 20px;
+    right: 20px;
+    background: #8b0000;
     color: white;
     border: none;
     border-radius: 5px;
-    padding: 5px 10px;
+    padding: 6px 12px;
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 600;
     transition: all 0.3s ease;
 }
 
 .btn-eliminar:hover {
-    background: #c82333;
-    transform: scale(1.05);
+    background: #b30000;
+    transform: scale(1.08);
 }
 
 /* Modal styles */
@@ -114,7 +128,7 @@ body {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.9);
     animation: fadeIn 0.3s ease;
 }
 
@@ -124,13 +138,14 @@ body {
 }
 
 .modal-content {
-    background-color: white;
-    margin: 50px auto;
+    background-color: #2d2d2d;
+    margin: 30px auto;
     width: 90%;
-    max-width: 500px;
-    border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    max-width: 700px;
+    border-radius: 5px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
     animation: slideDown 0.3s ease;
+    border: 1px solid #8b0000;
 }
 
 @keyframes slideDown {
@@ -145,18 +160,20 @@ body {
 }
 
 .modal-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #8b0000;
     color: white;
     padding: 20px;
-    border-radius: 15px 15px 0 0;
+    border-radius: 5px 5px 0 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 2px solid #660000;
 }
 
 .modal-header h2 {
     margin: 0;
     font-size: 1.5rem;
+    color: white;
 }
 
 .close {
@@ -164,37 +181,44 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: color 0.3s ease;
+    color: white;
 }
 
 .close:hover {
-    color: #ddd;
+    color: #cccccc;
 }
 
 .modal-body {
-    padding: 20px;
+    padding: 25px;
+    max-height: 60vh;
+    overflow-y: auto;
+    background: #2d2d2d;
 }
 
 .modal-body label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #333;
+    color: #e0e0e0;
+    font-size: 14px;
 }
 
 .modal-body textarea {
     width: 100%;
     padding: 10px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
+    border: 2px solid #4a4a4a;
+    border-radius: 5px;
     font-family: inherit;
     font-size: 14px;
     resize: vertical;
     transition: border-color 0.3s ease;
+    background: #3a3a3a;
+    color: #e0e0e0;
 }
 
 .modal-body textarea:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #8b0000;
 }
 
 .modal-footer {
@@ -202,12 +226,15 @@ body {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+    background: #2d2d2d;
+    border-top: 1px solid #4a4a4a;
+    border-radius: 0 0 5px 5px;
 }
 
 .btn-cancelar, .btn-guardar {
     padding: 10px 20px;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
@@ -215,48 +242,54 @@ body {
 }
 
 .btn-cancelar {
-    background: #6c757d;
+    background: #555555;
     color: white;
 }
 
 .btn-cancelar:hover {
-    background: #5a6268;
+    background: #444444;
     transform: translateY(-1px);
 }
 
 .btn-guardar {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #8b0000;
     color: white;
 }
 
 .btn-guardar:hover {
+    background: #b30000;
     transform: translateY(-1px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 15px rgba(139, 0, 0, 0.4);
 }
 
 /* Scrollbar styling */
 .lista-textos::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 .lista-textos::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
+    background: #2a2a2a;
+    border-radius: 5px;
 }
 
 .lista-textos::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
+    background: #8b0000;
+    border-radius: 5px;
 }
 
 .lista-textos::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: #b30000;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+    body {
+        padding: 0;
+    }
+    
     .container {
-        margin: 10px;
+        width: 100%;
+        height: 100vh;
     }
     
     .header {
@@ -274,12 +307,29 @@ body {
         padding: 15px;
     }
     
+    .texto-contenido {
+        padding-right: 0;
+        margin-bottom: 0;
+    }
+    
+    .btn-eliminar {
+        position: static;
+        margin-top: 15px;
+        width: 100%;
+    }
+    
     .modal-content {
         margin: 20px auto;
         width: 95%;
+        max-width: none;
+    }
+    
+    .modal-body {
+        padding: 15px;
     }
 }
-/* Estilos adicionales para los selectores */
+
+/* Estilos para selectores */
 .selector-group {
     margin-bottom: 20px;
 }
@@ -288,58 +338,131 @@ body {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #333;
+    color: #e0e0e0;
     font-size: 14px;
 }
 
 .selector {
     width: 100%;
     padding: 10px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
+    border: 2px solid #4a4a4a;
+    border-radius: 5px;
     font-family: inherit;
     font-size: 14px;
-    background-color: white;
+    background-color: #3a3a3a;
+    color: #e0e0e0;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .selector:hover {
-    border-color: #667eea;
+    border-color: #8b0000;
 }
 
 .selector:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #8b0000;
+    box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.2);
 }
 
 .preview-group {
     margin-top: 20px;
     padding-top: 15px;
-    border-top: 2px solid #f0f0f0;
+    border-top: 2px solid #4a4a4a;
 }
 
 .preview-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #333;
+    color: #e0e0e0;
     font-size: 14px;
 }
 
-.vista-previa {
-    background: linear-gradient(135deg, #f5f7fa 0%, #f3f4f6 100%);
-    padding: 15px;
-    border-radius: 8px;
-    color: #333;
-    font-style: italic;
-    border-left: 4px solid #667eea;
-    word-wrap: break-word;
-    min-height: 60px;
+/* Botón generar IA */
+.btn-generar-ia {
+    width: 100%;
+    background: #8b0000;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin: 20px 0;
 }
 
-/* Ajuste responsive para los selectores */
+.btn-generar-ia:hover {
+    background: #b30000;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(139, 0, 0, 0.4);
+}
+
+.btn-generar-ia:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Indicador de carga */
+.loading-indicator {
+    text-align: center;
+    padding: 20px;
+    background: #3a3a3a;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.spinner {
+    border: 3px solid #4a4a4a;
+    border-top: 3px solid #8b0000;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-indicator p {
+    color: #e0e0e0;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* Vista previa IA */
+.vista-previa-ia {
+    background: #3a3a3a;
+    padding: 20px;
+    border-radius: 5px;
+    color: #e0e0e0;
+    border-left: 5px solid #8b0000;
+    word-wrap: break-word;
+    min-height: 150px;
+    max-height: 400px;
+    overflow-y: auto;
+    font-style: normal;
+    line-height: 1.6;
+}
+
+.vista-previa-ia.ia-generado {
+    border-left: 5px solid #b30000;
+    background: #404040;
+}
+
+/* Estilos adicionales */
+.btn-guardar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Ajustes responsive selectores */
 @media (max-width: 768px) {
     .selector-group {
         margin-bottom: 15px;
@@ -350,8 +473,74 @@ body {
         font-size: 13px;
     }
     
-    .vista-previa {
-        font-size: 13px;
-        padding: 12px;
+    .vista-previa-ia {
+        padding: 15px;
+        font-size: 14px;
+    }
+}
+
+/* Pantallas grandes */
+@media (min-width: 1920px) {
+    .texto-contenido {
+        font-size: 1.1rem;
+        line-height: 1.7;
+    }
+    
+    .texto-item {
+        padding: 25px;
+    }
+}
+
+/* Mensaje cuando no hay escenarios */
+.texto-item[style*="text-align: center"] {
+    text-align: center;
+    color: #999 !important;
+}
+/* Estilos para el header con logo */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Ajustes responsive para el logo */
+@media (max-width: 768px) {
+    .header-left {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .header-logo {
+        height: 35px;
+    }
+}
+
+/* Estilos para el logo en el modal */
+.modal-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-logo {
+    height: 30px;
+    width: auto;
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    .modal-header-left {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .modal-logo {
+        height: 25px;
     }
 }

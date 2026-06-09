@@ -1,37 +1,76 @@
 // Array para almacenar los textos
 let textos = [];
+let escenarioActual = null; // Almacenar el escenario generado actualmente
 
 // Elementos del DOM
 const razaSelect = document.getElementById('raza');
 const ambienteSelect = document.getElementById('ambiente');
 const extensionSelect = document.getElementById('extension');
+const btnGenerarIA = document.getElementById('btnGenerarIA');
+const btnGuardar = document.getElementById('btnGuardar');
+const loadingIndicator = document.getElementById('loadingIndicator');
+const previewGroup = document.getElementById('previewGroup');
 const vistaPreviaDiv = document.getElementById('vistaPrevia');
 
-// Función para generar el texto basado en los selectores
-function generarTexto() {
+// Función para generar escenario con IA
+async function generarEscenarioConIA() {
     const raza = razaSelect.value;
     const ambiente = ambienteSelect.value;
     const extension = extensionSelect.value;
     
-    // Formato: "Estas en un {extension,ambiente}, donde viven los {raza}"
-    return `Estas en un ${extension} de ${ambiente}, donde viven los ${raza}`;
+    // Mostrar loading
+    loadingIndicator.style.display = 'block';
+    previewGroup.style.display = 'none';
+    btnGenerarIA.disabled = true;
+    btnGuardar.disabled = true;
+    
+    try {
+        const response = await fetch('/api/generar-escenario', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                raza: raza,
+                ambiente: ambiente,
+                extension: extension
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Error al generar el escenario');
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            escenarioActual = result.texto;
+            vistaPreviaDiv.innerHTML = formatearTextoEscenario(escenarioActual);
+            previewGroup.style.display = 'block';
+            btnGuardar.disabled = false;
+            
+            // Mostrar indicador de que se usó IA
+            if (result.usando_ia) {
+                vistaPreviaDiv.classList.add('ia-generado');
+            }
+        } else {
+            throw new Error(result.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Error al generar el escenario. Por favor, intenta de nuevo.');
+        vistaPreviaDiv.innerHTML = '❌ Error al generar el escenario. Intenta de nuevo.';
+        previewGroup.style.display = 'block';
+    } finally {
+        loadingIndicator.style.display = 'none';
+        btnGenerarIA.disabled = false;
+    }
 }
 
-// Función para actualizar la vista previa
-function actualizarVistaPrevia() {
-    const textoGenerado = generarTexto();
-    vistaPreviaDiv.textContent = textoGenerado;
-}
-
-// Agregar event listeners para actualizar la vista previa
-if (razaSelect) {
-    razaSelect.addEventListener('change', actualizarVistaPrevia);
-}
-if (ambienteSelect) {
-    ambienteSelect.addEventListener('change', actualizarVistaPrevia);
-}
-if (extensionSelect) {
-    extensionSelect.addEventListener('change', actualizarVistaPrevia);
+// Función para formatear el texto del escenario
+function formatearTextoEscenario(texto) {
+    // Convertir saltos de línea a <br> y formato básico
+    return texto.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 }
 
 // Cargar datos del servidor al iniciar
@@ -57,20 +96,18 @@ function mostrarError(mensaje) {
     contenedor.innerHTML = `<div class="texto-item" style="text-align: center; color: #dc3545;">❌ ${mensaje}</div>`;
 }
 
-// Renderizar la lista de textos
 function renderizarLista() {
     const contenedor = document.getElementById('listaTextos');
     
     if (textos.length === 0) {
-        contenedor.innerHTML = '<div class="texto-item" style="text-align: center; color: #666;">📝 No hay textos aún. ¡Crea el primero usando el botón + Crear Texto!</div>';
+        contenedor.innerHTML = '<div class="texto-item" style="text-align: center; color: #999;">📝 No hay escenarios aún. ¡Crea tu primer escenario con IA usando el botón + Crear Escenario!</div>';
         return;
     }
     
     contenedor.innerHTML = textos.map(texto => `
         <div class="texto-item" data-id="${texto.id}">
             <div class="texto-contenido">${escapeHtml(texto.texto)}</div>
-            <div class="texto-fecha">📅 ${texto.fecha}</div>
-            <button class="btn-eliminar" onclick="eliminarTexto(${texto.id})">🗑️ Eliminar</button>
+            <button class="btn-eliminar" onclick="eliminarTexto(${texto.id})">🗑️</button>
         </div>
     `).join('');
 }
@@ -82,13 +119,19 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Función para agregar nuevo texto (usando los selectores)
-async function agregarTexto() {
-    const textoGenerado = generarTexto();
+// Función para guardar el escenario generado por IA
+async function guardarEscenario() {
+    if (!escenarioActual) {
+        alert('⚠️ Por favor, genera un escenario con IA primero.');
+        return false;
+    }
     
     const nuevoItem = {
         id: Date.now(),
-        texto: textoGenerado
+        texto: escenarioActual,
+        raza: razaSelect.value,
+        ambiente: ambienteSelect.value,
+        extension: extensionSelect.value
     };
     
     try {
@@ -101,7 +144,7 @@ async function agregarTexto() {
         });
         
         if (!response.ok) {
-            throw new Error('Error al guardar el texto');
+            throw new Error('Error al guardar el escenario');
         }
         
         const result = await response.json();
@@ -113,21 +156,21 @@ async function agregarTexto() {
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('❌ Error al guardar el texto. Por favor, intenta de nuevo.');
+        alert('❌ Error al guardar el escenario. Por favor, intenta de nuevo.');
         return false;
     }
 }
 
 // Función para eliminar texto
 async function eliminarTexto(id) {
-    if (confirm('¿Estás seguro de que quieres eliminar este texto?')) {
+    if (confirm('¿Estás seguro de que quieres eliminar este escenario?')) {
         try {
             const response = await fetch(`/api/textos/${id}`, {
                 method: 'DELETE'
             });
             
             if (!response.ok) {
-                throw new Error('Error al eliminar el texto');
+                throw new Error('Error al eliminar el escenario');
             }
             
             const result = await response.json();
@@ -138,42 +181,47 @@ async function eliminarTexto(id) {
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('❌ Error al eliminar el texto. Por favor, intenta de nuevo.');
+            alert('❌ Error al eliminar el escenario. Por favor, intenta de nuevo.');
         }
     }
+}
+
+// Resetear el modal
+function resetearModal() {
+    escenarioActual = null;
+    previewGroup.style.display = 'none';
+    btnGuardar.disabled = true;
+    vistaPreviaDiv.innerHTML = '';
+    loadingIndicator.style.display = 'none';
 }
 
 // Modal functionality
 const modal = document.getElementById('modalAgregar');
 const btnAgregar = document.getElementById('btnAgregar');
-const btnGuardar = document.getElementById('btnGuardar');
 const btnCancelar = document.getElementById('btnCancelar');
 const closeBtn = document.querySelector('.close');
 
-// Abrir modal y resetear selectores
+// Abrir modal
 btnAgregar.onclick = function() {
-    // Resetear selectores a valores por defecto
-    razaSelect.value = 'humanos';
-    ambienteSelect.value = 'bosques';
-    extensionSelect.value = 'pueblo';
-    
-    // Actualizar vista previa
-    actualizarVistaPrevia();
-    
+    resetearModal();
     modal.style.display = 'block';
 }
 
 // Cerrar modal
 function cerrarModal() {
+    resetearModal();
     modal.style.display = 'none';
 }
 
 closeBtn.onclick = cerrarModal;
 btnCancelar.onclick = cerrarModal;
 
-// Guardar texto
+// Evento para generar con IA
+btnGenerarIA.onclick = generarEscenarioConIA;
+
+// Guardar escenario
 btnGuardar.onclick = async function() {
-    const exito = await agregarTexto();
+    const exito = await guardarEscenario();
     if (exito) {
         cerrarModal();
     }

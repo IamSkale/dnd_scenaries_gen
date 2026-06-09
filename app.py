@@ -97,7 +97,6 @@ def agregar_texto():
     json_path = os.path.join(BASE_DIR, 'data.json')
     try:
         nuevo_texto = request.json
-        nuevo_texto['fecha'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         if 'id' not in nuevo_texto:
             nuevo_texto['id'] = int(datetime.now().timestamp() * 1000)

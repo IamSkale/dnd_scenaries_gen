@@ -3,76 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Escenarios</title>
+    <title>Generador de Escenarios D&D con IA</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Generador de Escenarios</h1>
+            <div class="header-left">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="header-logo">
+                <h1>Generador de Escenarios D&D con IA</h1>
+            </div>
             <button id="btnAgregar" class="btn-agregar">+ Crear Escenario</button>
         </div>
         
         <div id="listaTextos" class="lista-textos">
-            <div style="text-align: center; padding: 20px;">Cargando Escenarios...</div>
+            <div style="text-align: center; padding: 20px;">Cargando escenarios...</div>
         </div>
     </div>
 
-    <!-- Modal para crear nuevo texto con selectores -->
+    <!-- Modal para crear nuevo escenario con IA -->
     <div id="modalAgregar" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Crear Nuevo Escenario</h2>
+                <div class="modal-header-left">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="modal-logo">
+                    <h2>🎲 Crear Nuevo Escenario con IA</h2>
+                </div>
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="selector-group">
-                    <label for="raza">Raza:</label>
+                    <label for="raza">Raza predominante:</label>
                     <select id="raza" class="selector">
-                        <option value="humanos">Humanos</option>
-                        <option value="elfos">Elfos</option>
-                        <option value="enanos">Enanos</option>
-                        <option value="orcos">Orcos</option>
-                        <option value="duendes">Duendes</option>
-                        <option value="halflings">Halflings</option>
-                        <option value="tieflings">Tieflings</option>
-                        <option value="dragonborns">Dragonborns</option>
+                        <option value="humanos">👥 Humanos</option>
+                        <option value="elfos">🧝 Elfos</option>
+                        <option value="enanos">⛏️ Enanos</option>
+                        <option value="orcos">👹 Orcos</option>
+                        <option value="duendes">🍀 Duendes</option>
+                        <option value="halflings">🍃 Halflings</option>
+                        <option value="tieflings">🔥 Tieflings</option>
+                        <option value="dragonborns">🐲 Dragonborns</option>
                     </select>
                 </div>
 
                 <div class="selector-group">
                     <label for="ambiente">Ambiente:</label>
                     <select id="ambiente" class="selector">
-                        <option value="bosques">Bosques</option>
-                        <option value="montañas">Montañas</option>
-                        <option value="desiertos">Desiertos</option>
-                        <option value="junglas">Junglas</option>
-                        <option value="ciudades">Ciudades</option>
-                        <option value="cuevas">Cuevas</option>
-                        <option value="pantanos">Pantanos</option>
-                        <option value="praderas">Praderas</option>
+                        <option value="bosques">🌲 Bosques</option>
+                        <option value="montañas">⛰️ Montañas</option>
+                        <option value="desiertos">🏜️ Desiertos</option>
+                        <option value="junglas">🌴 Junglas</option>
+                        <option value="ciudades">🏙️ Ciudades</option>
+                        <option value="cuevas">🕳️ Cuevas</option>
+                        <option value="pantanos">🐊 Pantanos</option>
+                        <option value="praderas">🌾 Praderas</option>
+                        <option value="tundra">❄️ Tundra</option>
+                        <option value="costas">🌊 Costas</option>
                     </select>
                 </div>
 
                 <div class="selector-group">
-                    <label for="extension">Extensión:</label>
+                    <label for="extension">Extensión del territorio:</label>
                     <select id="extension" class="selector">
-                        <option value="pueblo">Pueblo</option>
-                        <option value="reino">Reino</option>
-                        <option value="región">Región</option>
+                        <option value="pueblo">🏘️ Pueblo</option>
+                        <option value="reino">👑 Reino</option>
+                        <option value="región">🗺️ Región</option>
                     </select>
                 </div>
 
-                <div class="preview-group">
-                    <label>Vista previa del escenario:</label>
-                    <div id="vistaPrevia" class="vista-previa">
-                        Selecciona las opciones para ver el escenario
+                <!-- Botón para generar con IA -->
+                <button id="btnGenerarIA" class="btn-generar-ia">
+                    ✨ Generar Escenario con IA
+                </button>
+
+                <!-- Indicador de carga -->
+                <div id="loadingIndicator" style="display: none;" class="loading-indicator">
+                    <div class="spinner"></div>
+                    <p>🎲 La IA está creando un escenario épico...</p>
+                </div>
+
+                <!-- Vista previa del escenario generado por IA -->
+                <div class="preview-group" id="previewGroup" style="display: none;">
+                    <label>📜 Escenario generado por IA:</label>
+                    <div id="vistaPrevia" class="vista-previa-ia">
+                        <!-- Aquí se mostrará el escenario generado -->
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button id="btnCancelar" class="btn-cancelar">Cancelar</button>
-                <button id="btnGuardar" class="btn-guardar">Guardar Escenario</button>
+                <button id="btnGuardar" class="btn-guardar" disabled>💾 Guardar Escenario</button>
             </div>
         </div>
     </div>
