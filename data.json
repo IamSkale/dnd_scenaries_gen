@@ -27,6 +27,20 @@
       "raza": "dragonborns",
       "ambiente": "japones",
       "extension": "reino"
+    },
+    {
+      "id": 1781057238321,
+      "texto": "El Pueblo de las Cavernas de la Roca es un refugio y centro de poder en medio de la Gran Selva. Se encuentra en la cima de una montaña rocosa, rodeada por cascadas cristalinas que se extienden a través del valle. El ambiente predominantemente cristalino ha convertido la selva en un paraje arquetípico, lleno de luz solar y un brillo que ilumina las rocas de color púrpura y rosa.\n\nEl gobierno del Pueblo de las Cavernas de la Roca está liderado por una figura llamada \"El Alcalde del Pueblo\", un duende de roca con una reputación de justicia y protección. El Alcalde es el jefe supremo, pero su poder se extiende a través del consejo de ancianos y el cacique, quienes son los encargados de mantener el orden en la aldea.\n\nLa economía del pueblo se basa en la extracción y venta de recursos naturales, incluyendo las resinas brillantes de las rocas de la montaña y los minerales preciosos que brotan del suelo. El Pueblo de las Cavernas de la Roca ha mantenido sus relaciones con los reinos vecinos a través de sus tradiciones de comercio, y con los demás reinos, mantienen una diplomacia estable.",
+      "raza": "duende de roca",
+      "ambiente": "cristal",
+      "extension": "pueblo"
+    },
+    {
+      "id": 1781101580867,
+      "texto": "El pueblo de Araxir, enanos de estatura mediana y facciones finas, ha sobrevivido a los cataclismos de la era postapocaliptica. El gobierno local es una estructura repleta de aldeanos que se reúnen en las calles para discutir y tomar decisiones, mientras el alcalde, un anciano conocido por su sabiduría y paciencia, lleva el frente de la ciudad. \n\nLa economía de Araxir se basa en la agricultura, que ha prosperado gracias a los cultivos de espíritu, una planta medicinal rara que se encuentra en abundancia en la región. El pueblo también exporta productos artesanales, como la cerámica de la tierra madre y los textiles de coloridos hongos, a otros reinos cercanos. \n\nLa estructura social es rica y compleja, con un sistema de tribus basada en el linaje y el honor, donde el cacique, un anciano temido pero respetado, lidera la vida política. Aunque la economía está centrada en los campos de cultivo, Araxir también enfrenta problemas como escasez de recursos naturales, especialmente agua, que han provocado tensiones entre vecinos y aldeanos más cercanos a las cuevas donde se encuentran los ríos.",
+      "raza": "enanos",
+      "ambiente": "postapocaliptico",
+      "extension": "pueblo"
     }
   ]
 }

@@ -45,9 +45,7 @@ class RAGRetriever:
             "desiertos": "Los desiertos son implacables pero esconden ruinas antiguas y tesoros olvidados bajo la arena. Tribus nómadas recorren las dunas, y criaturas como dragones azules o lamias acechan en templos enterrados. Las noches son frías y los días abrasadores.",
             
             "junglas": "Las junglas son densas y húmedas, llenas de vida en cada hoja. Ruinas cubiertas de musgo albergan trampas mortales y artefactos poderosos. Tabaxi, yuan-ti y dinosaurios habitan entre la vegetación. Cada paso puede revelar una criatura que acecha.",
-            
-            "ciudades": "Las ciudades son centros de comercio e intriga. Gremios, templos, tabernas y alcantarillas ofrecen tanto peligros como oportunidades. Las noches son peligrosas y la política de gremios puede ser mortal para los desprevenidos.",
-            
+                        
             "cuevas": "Las cuevas son oscuras y húmedas, llenas de estalactitas y pasadizos que se bifurcan. Murciélagos, goblins, trogloditas y criaturas olvidadas acechan en las profundidades. Cada esquina puede revelar un tesoro o una muerte segura.",
             
             "pantanos": "Los pantanos son lugares tristes y enfermos, llenos de niebla venenosa y aguas estancadas. Brujas, hags y criaturas no muertas acechan entre los cipreses. Cada paso puede hundirte en el barro o despertar algo que debería haber quedado dormido.",

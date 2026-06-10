@@ -80,6 +80,7 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Para que la imagen no se salga */
 }
 
 .texto-item:hover {
@@ -89,14 +90,129 @@ body {
     box-shadow: 0 5px 20px rgba(0,0,0,0.3);
 }
 
+/* Capa de imagen de fondo */
+.texto-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Aumentado para mejor cobertura */
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.35; /* Reducido de 0.7 a 0.35 para más opacidad */
+    z-index: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Gradiente de difuminado de izquierda a derecha */
+.texto-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        rgba(26, 26, 26, 0) 0%,
+        rgba(26, 26, 26, 0) 20%,
+        rgba(26, 26, 26, 0.1) 30%,
+        rgba(26, 26, 26, 0.3) 40%,
+        rgba(26, 26, 26, 0.5) 50%,
+        rgba(26, 26, 26, 0.7) 60%,
+        rgba(26, 26, 26, 0.85) 70%,
+        rgba(26, 26, 26, 0.95) 85%,
+        rgba(26, 26, 26, 1) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+.texto-contenido, .btn-eliminar {
+    position: relative;
+    z-index: 2;
+}
+
 .texto-contenido {
     color: #e0e0e0;
     line-height: 1.6;
     margin-bottom: 0;
     word-wrap: break-word;
     font-size: 1rem;
+    font-weight: 600;
     padding-right: 80px;
     flex: 1;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Mejora legibilidad */
+}
+
+.texto-item.ambiente-bosques::before {
+    background-image: url('/static/images/bosques.jpeg');
+}
+
+.texto-item.ambiente-montañas::before {
+    background-image: url('/static/images/montañas.jpeg');
+}
+
+.texto-item.ambiente-desiertos::before {
+    background-image: url('/static/images/desiertos.jpeg');
+}
+
+.texto-item.ambiente-junglas::before {
+    background-image: url('/static/images/junglas.jpeg');
+}
+
+.texto-item.ambiente-cuevas::before {
+    background-image: url('/static/images/cuevas.jpeg');
+}
+
+.texto-item.ambiente-pantanos::before {
+    background-image: url('/static/images/pantanos.jpeg');
+}
+
+.texto-item.ambiente-praderas::before {
+    background-image: url('/static/images/praderas.jpeg');
+}
+
+.texto-item.ambiente-tundra::before {
+    background-image: url('/static/images/tundra.jpeg');
+}
+
+.texto-item.ambiente-costas::before {
+    background-image: url('/static/images/costas.jpeg');
+}
+
+.texto-item.ambiente-steampunk::before {
+    background-image: url('/static/images/steampunk.jpeg');
+}
+
+.texto-item.ambiente-postapocaliptico::before {
+    background-image: url('/static/images/postapocaliptico.jpeg');
+}
+
+.texto-item.ambiente-gotico::before {
+    background-image: url('/static/images/gotico.jpeg');
+}
+
+.texto-item.ambiente-medieval::before {
+    background-image: url('/static/images/medieval.jpeg');
+}
+
+.texto-item.ambiente-japones::before {
+    background-image: url('/static/images/japones.jpeg');
+}
+
+.texto-item.ambiente-cristal::before {
+    background-image: url('/static/images/cristal.jpeg');
+}
+
+.texto-item.ambiente-flotante::before {
+    background-image: url('/static/images/flotante.jpeg');
+}
+
+.texto-item.ambiente-volcanico::before {
+    background-image: url('/static/images/volcanico.jpeg');
 }
 
 .btn-eliminar {
@@ -544,3 +660,27 @@ body {
         height: 25px;
     }
 }
+
+.texto-item:hover::before {
+    opacity: 0.5; /* Aumenta a 0.5 al hacer hover (antes 0.85) */
+}
+
+/* Ajuste responsive para móviles */
+@media (max-width: 768px) {
+    .texto-item::before {
+        width: 80%; /* En móvil, un poco más de imagen */
+        opacity: 0.3; /* Más opaco en móvil para legibilidad */
+    }
+    
+    .texto-item::after {
+        background: linear-gradient(
+            to right,
+            rgba(26, 26, 26, 0) 0%,
+            rgba(26, 26, 26, 0) 30%,
+            rgba(26, 26, 26, 0.5) 50%,
+            rgba(26, 26, 26, 0.85) 70%,
+            rgba(26, 26, 26, 1) 100%
+        );
+    }
+}
+

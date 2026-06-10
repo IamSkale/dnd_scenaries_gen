@@ -104,12 +104,16 @@ function renderizarLista() {
         return;
     }
     
-    contenedor.innerHTML = textos.map(texto => `
-        <div class="texto-item" data-id="${texto.id}">
-            <div class="texto-contenido">${escapeHtml(texto.texto)}</div>
-            <button class="btn-eliminar" onclick="eliminarTexto(${texto.id})">🗑️</button>
-        </div>
-    `).join('');
+    contenedor.innerHTML = textos.map(texto => {
+        // Crear una clase basada en el ambiente (normalizar nombre)
+        const ambienteClass = texto.ambiente ? `ambiente-${texto.ambiente.replace(/ /g, '-').toLowerCase()}` : '';
+        return `
+            <div class="texto-item ${ambienteClass}" data-id="${texto.id}">
+                <div class="texto-contenido">${escapeHtml(texto.texto)}</div>
+                <button class="btn-eliminar" onclick="eliminarTexto(${texto.id})">🗑️</button>
+            </div>
+        `;
+    }).join('');
 }
 
 // Función para escapar HTML (seguridad)
