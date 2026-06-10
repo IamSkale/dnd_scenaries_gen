@@ -34,15 +34,6 @@ class RAGPipeline:
                 raza, ambiente, extension, self.max_intentos
             )
             
-            # Mostrar resumen de evaluación
-            print(f"\n📊 Resumen de evaluación final:")
-            print(f"   Puntuación total: {evaluacion.get('puntuacion', 0):.1f}%")
-            print(f"   - Raza: {'✅' if evaluacion.get('raza_cumple', False) else '❌'}")
-            print(f"   - Ambiente: {'✅' if evaluacion.get('ambiente_cumple', False) else '❌'}")
-            print(f"   - Extensión: {'✅' if evaluacion.get('extension_cumple', False) else '❌'}")
-            print(f"   - Longitud adecuada: {'✅' if evaluacion.get('longitud_adecuada', False) else '❌'}")
-            print(f"   - Texto completo: {'✅' if evaluacion.get('texto_completo', False) else '❌'}")
-            
             # Recuperar contextos
             consulta = f"{raza} {ambiente} {extension}"
             contextos = self.retriever.retrieve(consulta, top_k=3)

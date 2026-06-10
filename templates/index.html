@@ -35,29 +35,46 @@
                 <div class="selector-group">
                     <label for="raza">Raza predominante:</label>
                     <select id="raza" class="selector">
+                        <!-- Razas originales -->
                         <option value="humanos">👥 Humanos</option>
                         <option value="elfos">🧝 Elfos</option>
+                        <option value="alto elfo">✨ Alto Elfo</option>
                         <option value="enanos">⛏️ Enanos</option>
+                        <option value="enano del valle">🏔️ Enano del Valle</option>
                         <option value="orcos">👹 Orcos</option>
-                        <option value="duendes">🍀 Duendes</option>
+                        <option value="medio orco">⚔️ Medio Orco</option>
+                        <option value="duendes">🔧 Gnomos</option>
+                        <option value="duende de roca">🪨 Gnomos de Roca</option>
                         <option value="halflings">🍃 Halflings</option>
+                        <option value="medio elfo">🌙 Medio Elfo</option>
                         <option value="tieflings">🔥 Tieflings</option>
                         <option value="dragonborns">🐲 Dragonborns</option>
+                        <option value="tritones">🌊 Tritones</option>
                     </select>
                 </div>
 
                 <div class="selector-group">
                     <label for="ambiente">Ambiente:</label>
                     <select id="ambiente" class="selector">
+                        <!-- Ambientes naturales originales -->
                         <option value="bosques">🌲 Bosques</option>
                         <option value="montañas">⛰️ Montañas</option>
                         <option value="desiertos">🏜️ Desiertos</option>
                         <option value="junglas">🌴 Junglas</option>
+                        <option value="ciudades">🏙️ Ciudades</option>
                         <option value="cuevas">🕳️ Cuevas</option>
                         <option value="pantanos">🐊 Pantanos</option>
                         <option value="praderas">🌾 Praderas</option>
                         <option value="tundra">❄️ Tundra</option>
                         <option value="costas">🌊 Costas</option>
+                        <option value="steampunk">⚙️ Steampunk</option>
+                        <option value="postapocaliptico">☢️ Postapocalíptico</option>
+                        <option value="gotico">🦇 Gótico</option>
+                        <option value="medieval">🏰 Medieval</option>
+                        <option value="japones">🏯 Japonés feudal</option>
+                        <option value="cristal">🔮 Cavernas de cristal</option>
+                        <option value="flotante">☁️ Islas flotantes</option>
+                        <option value="volcanico">🌋 Tierras volcánicas</option>
                     </select>
                 </div>
 
@@ -75,13 +92,13 @@
                     ✨ Generar Escenario con IA
                 </button>
 
-                <!-- Indicador de carga -->
+                <!-- Indicador de carga con elementos en línea -->
                 <div id="loadingIndicator" style="display: none;" class="loading-indicator">
-                    <div class="spinner"></div>
-                    <div>
-                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="modal-logo">
-                        <p>La IA está creando un escenario épico...</p>
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height: 30px; width: auto; animation: pulse 1.5s ease-in-out infinite;">
+                        <p style="margin: 0; color: #e0e0e0; font-weight: 500;">La IA está creando un escenario épico...</p>
                     </div>
+                    <div class="spinner" style="margin-top: 15px;"></div>
                 </div>
 
                 <!-- Vista previa del escenario generado por IA -->
@@ -98,6 +115,15 @@
             </div>
         </div>
     </div>
+
+    <!-- Añadir la animación pulse si no existe en styles.css -->
+    <style>
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
