@@ -2,9 +2,7 @@ from typing import Dict, Tuple
 import json
 import re
 
-class RAGEvaluator:
-    """Evaluador de escenarios D&D - usa el modelo de IA para evaluar la calidad"""
-    
+class RAGEvaluator:    
     # Rangos de palabras orientativos (solo como referencia, no para evaluación estricta)
     EXTENSION_LONGITUD = {
         "pueblo": {"min": 150, "max": 300, "promedio": 225},
@@ -76,7 +74,6 @@ Sé flexible pero honesto. Una descripción puede ser buena sin mencionar explí
             return self._evaluacion_fallback(texto, raza, ambiente, extension)
     
     def _completar_evaluacion(self, evaluacion: dict) -> dict:
-        """Completa los campos faltantes de la evaluación"""
         campos_por_defecto = {
             "cumple": False,
             "puntuacion": 50,
@@ -98,7 +95,6 @@ Sé flexible pero honesto. Una descripción puede ser buena sin mencionar explí
         return evaluacion
     
     def _evaluacion_fallback(self, texto: str, raza: str, ambiente: str, extension: str) -> dict:
-        """Evaluación de respaldo en caso de error de IA"""
         palabras = len(texto.split())
         rango = self.EXTENSION_LONGITUD.get(extension.lower(), {"min": 150})
         
@@ -116,9 +112,7 @@ Sé flexible pero honesto. Una descripción puede ser buena sin mencionar explí
             "sugerencias": ["Reintentar generación"]
         }
     
-    def _construir_prompt_correccion(self, texto: str, raza: str, ambiente: str, extension: str, evaluacion: dict) -> str:
-        """Construye el prompt para que el modelo corrija el escenario basado en la evaluación"""
-        
+    def _construir_prompt_correccion(self, texto: str, raza: str, ambiente: str, extension: str, evaluacion: dict) -> str:        
         problemas = evaluacion.get("problemas", [])
         sugerencias = evaluacion.get("sugerencias", [])
         
@@ -161,9 +155,6 @@ INSTRUCCIONES DE CORRECCIÓN:
 Genera la versión mejorada del escenario:"""
     
     def corregir_con_ia(self, texto: str, raza: str, ambiente: str, extension: str, evaluacion: dict) -> str:
-        """
-        Usa el modelo para corregir el escenario basado en la evaluación de IA
-        """
         prompt = self._construir_prompt_correccion(texto, raza, ambiente, extension, evaluacion)
         
         try:
@@ -180,10 +171,6 @@ Genera la versión mejorada del escenario:"""
             return texto
     
     def regenerar_si_necesario(self, raza: str, ambiente: str, extension: str, max_intentos: int = 3) -> Tuple[str, Dict]:
-        """
-        Genera y evalúa el escenario usando el modelo como juez.
-        El modelo decide si cumple o no con los requisitos.
-        """
         texto = None
         evaluacion = None
         

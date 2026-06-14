@@ -22,7 +22,6 @@ class RAGPipeline:
             self.evaluator = RAGEvaluator(self.generator)
     
     def generar_escenario(self, raza, ambiente, extension):
-        """Genera un escenario completo usando evaluación con IA"""
         print(f"\n🏰 Generando escenario D&D")
         print(f"   Raza: {raza}")
         print(f"   Ambiente: {ambiente}")

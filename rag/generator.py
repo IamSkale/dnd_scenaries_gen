@@ -160,7 +160,6 @@ class RAGGenerator:
         return texto
     
     def _format_prompt(self, user_message):
-        """Formatea el prompt para Qwen"""
         return f"""<|im_start|>system
 Eres un Dungeon Master experto en Dungeons & Dragons. Creas descripciones inmersivas de escenarios para aventuras. Tus descripciones son útiles para el juego.<|im_end|>
 <|im_start|>user
@@ -221,9 +220,7 @@ Eres un Dungeon Master experto en Dungeons & Dragons. Creas descripciones inmers
 
     Esta región debe sentirse viva y compleja, con múltiples actores políticos y económicos compitiendo por poder."""
     
-    def _fallback_descripcion(self, raza, ambiente, extension):
-        """Descripciones de respaldo cuando el modelo no está disponible con longitud adaptada"""
-        
+    def _fallback_descripcion(self, raza, ambiente, extension):        
         rango = self._obtener_longitud_por_extension(extension)
         
         # Descripciones base
