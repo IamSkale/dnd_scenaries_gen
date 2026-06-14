@@ -6,18 +6,6 @@
 
 Sistema de generación automática de escenarios para **Dungeons & Dragons** utilizando un Modelo de Lenguaje Grande (LLM) como componente central. El sistema genera descripciones estructuradas de pueblos, reinos o continentes, incluyendo aspectos físicos, políticos, económicos y sociales.
 
-## 📋 Tabla de Contenidos
-
-- [Características](#características)
-- [Requisitos](#requisitos)
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Configuración](#configuración)
-- [Experimentos](#experimentos)
-- [Ejemplos](#ejemplos)
-- [Solución de Problemas](#solución-de-problemas)
-- [Licencia](#licencia)
 
 ## ✨ Características
 
