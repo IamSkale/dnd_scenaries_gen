@@ -32,21 +32,21 @@ Sistema de generación automática de escenarios para **Dungeons & Dragons** uti
 ## 🔧 Instalación
 
 ### Clonar o crear el proyecto
-git clone https://github.com/IamSkale/dnd_scenaries_gen
-cd dnd_scenaries_gen
+git clone https://github.com/IamSkale/dnd_scenaries_gen\n
+cd dnd_scenaries_gen\n
 
 ### Crear entorno virtual
-python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+python -m venv venv\n
+source venv/bin/activate  # En Windows: venv\Scripts\activate\n
 
 ### Instalar dependencias
-pip install flask llama-cpp-python python-dotenv
+pip install flask llama-cpp-python python-dotenv\n
 
 ### Descargar el modelo
-mkdir models
-cd models
-wget https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf
-cd ..
+mkdir models\n
+cd models\n
+wget https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf\n
+cd ..\n
 
 ### Ejecutar el proyecto
-python app.py
+python app.py\n
