@@ -1,1 +1,64 @@
-La idea general del proyecto es, resolviendo el problema del tema 8, crear un generador de escenarios para un juego de Dungeons and Dragons, con sus restricciones y una estructura bien definida, la longitud del texto podria estar definida por la extension del escenario, ya sea un continente, un pais o un pueblo, como longitudes larga, media o corta, respectivamente, el texto siempre tendra el formato "descripciones fisicas del escenario y sus habitantes y luego explicacion de su situacion economica, politica y social". Se puede agregar una restriccion de ambientacion, para un texto mucho mas cercano a lo que necesitaria el usuario y ya con todas esas reglas bien definidas se usa el modelo de lenguaje para la creacion y revision del mensaje.# proyecto_IA
+# 🎲 Generador de Escenarios para Dungeons & Dragons con IA
+
+![Versión](https://img.shields.io/badge/version-1.0.0-blue)
+![Python](https://img.shields.io/badge/python-3.10+-green)
+![License](https://img.shields.io/badge/license-MIT-orange)
+
+Sistema de generación automática de escenarios para **Dungeons & Dragons** utilizando un Modelo de Lenguaje Grande (LLM) como componente central. El sistema genera descripciones estructuradas de pueblos, reinos o continentes, incluyendo aspectos físicos, políticos, económicos y sociales.
+
+## 📋 Tabla de Contenidos
+
+- [Características](#características)
+- [Requisitos](#requisitos)
+- [Instalación](#instalación)
+- [Uso](#uso)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Configuración](#configuración)
+- [Experimentos](#experimentos)
+- [Ejemplos](#ejemplos)
+- [Solución de Problemas](#solución-de-problemas)
+- [Licencia](#licencia)
+
+## ✨ Características
+
+- **Generación inteligente**: Usa LLM para crear escenarios coherentes y detallados
+- **Evaluación automática**: El mismo LLM evalúa si el escenario cumple las restricciones
+- **Múltiples escalas**: Genera descripciones para pueblos, reinos o continentes
+- **Diversidad de razas**: Soporta 14 razas diferentes (humanos, elfos, enanos, etc.)
+- **Variedad de ambientes**: 17 ambientes naturales y temáticos
+- **Regeneración iterativa**: Mejora automática hasta cumplir criterios de calidad
+- **Interfaz web**: Aplicación Flask con interfaz amigable
+- **Sistema RAG**: Recupera contextos relevantes para mejorar la generación
+
+## 📦 Requisitos
+
+### Hardware
+- **RAM mínima**: 4GB (8GB recomendado)
+- **Almacenamiento**: 2GB libres
+- **GPU**: Opcional (para aceleración)
+
+### Software
+- **Python**: 3.10 o superior
+- **Sistema operativo**: Windows, Linux o macOS
+
+## 🔧 Instalación
+
+### Clonar o crear el proyecto
+git clone https://github.com/IamSkale/dnd_scenaries_gen
+cd dnd_scenaries_gen
+
+### Crear entorno virtual
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+
+### Instalar dependencias
+pip install flask llama-cpp-python python-dotenv
+
+### Descargar el modelo
+mkdir models
+cd models
+wget https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/Qwen2.5-1.5B-Instruct-Q4_K_M.gguf
+cd ..
+
+### Ejecutar el proyecto
+python app.py
